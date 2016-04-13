@@ -8,7 +8,5 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Development/SDP/Jars/commons-io-2.4.jar"/>
-	<classpathentry kind="lib" path="C:/Development/SDP/Jars/javax.servlet-3.0.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
