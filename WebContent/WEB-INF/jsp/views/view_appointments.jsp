@@ -34,26 +34,30 @@
 							<th>Description</th>
 							<th>UTA Student ID</th>
 							<th>Student Email</th>
-							
-							
-							
-							
+
+
+
+
 							<!-- This adds "Phone Number" to the table  -->
-							<th>Phone Number</th> 
-							
-							
-							
-							
-							
+							<th>Phone Number</th>
+
+
+
+
+
 							<th class="text-center">Action</th>
 						</tr>
 					</thead>
 					<%@ page import="java.util.ArrayList"%>
 					<%@ page import="uta.mav.appoint.beans.Appointment"%>
 					<!-- begin processing appointments  -->
-					<% ArrayList<Appointment> array = (ArrayList<Appointment>)session.getAttribute("appointments");
-		    			if (array != null){%>
-					<%for (int i=0;i<array.size();i++){ %>
+					<%
+						ArrayList<Appointment> array = (ArrayList<Appointment>) session.getAttribute("appointments");
+						if (array != null) {
+					%>
+					<%
+						for (int i = 0; i < array.size(); i++) {
+					%>
 					<tr>
 						<td><%=array.get(i).getPname()%></td>
 						<td><%=array.get(i).getAdvisingDate()%></td>
@@ -61,21 +65,21 @@
 						<td><%=array.get(i).getAdvisingEndTime()%></td>
 						<td><%=array.get(i).getAppointmentType()%></td>
 						<td><%=array.get(i).getAdvisorEmail()%></td>
-						<td><%=array.get(i).getDescription() %></td>
+						<td><%=array.get(i).getDescription()%></td>
 						<td><%=array.get(i).getStudentId()%></td>
 						<td><%=array.get(i).getStudentEmail()%></td>
-						
-						
-						
-						
+
+
+
+
 						<!-- =array.get(i).getstudentPhoneNumber() -->
 						<td><%=array.get(i).getStudentPhoneNumber()%></td>
-						
-						
-						
-						
-						
-						
+
+
+
+
+
+
 						<td class="text-center"><button type="button" id=button1
 								<%=i%> onclick="button<%=i%>()">Cancel</button></td>
 						<td class="text-center"><button type="button" id=button2_
@@ -99,9 +103,6 @@
 										document.getElementById("description").value = "<%=array.get(i).getDescription()%>";
 										document.getElementById("studentid").value = "<%=array.get(i).getStudentId()%>";
 										//added element for student id on 30th March 2016 by Maithili
-										
-										
-										
 										//<Hien>
 										document.getElementById("StudentPhoneNumber").value = "<%=array.get(i).getStudentPhoneNumber()%>";
 										
@@ -112,14 +113,25 @@
 										$('#addApptModal').modal();
 								}</script>
 					<script> function button__<%=i%>(){
-										document.getElementById("to").value = "<%=array.get(i).getStudentEmail()%>";
+										document.getElementById("start").value = "<%=array.get(i).getAdvisingStartTime()%>"; 
+										document.getElementById("end").value = "<%=array.get(i).getAdvisingEndTime()%>"; 
+										<%-- document.getElementById("to").value = "<%=array.get(i).getStudentEmail()%>"; --%>
+										document.getElementById("advisorEmail").value = "<%=array.get(i).getAdvisorEmail()%>";
+										document.getElementById("studentEmail").value = "<%=array.get(i).getStudentEmail()%>";
 										$('#emailModal').modal();
 								}</script>
 					<script> function emailSend(){
-									var to = document.getElementById("to").value;
+									
+									var student_email = document.getElementById("studentEmail").value;
+									var advisor_email = document.getElementById("advisorEmail").value;
+									var starttime = document.getElementById("start").value;
+									var endtime = document.getElementById("end").value;
+									
+									/* var to = document.getElementById("to").value;
 									var body = document.getElementById("email").value;
-									var subject = document.getElementById("subject").value;
-									var params = ('to='+to+'&body='+body+'&subject='+subject);
+									var subject = document.getElementById("subject").value; 
+									var params = ('to='+to+'&body='+body+'&subject='+subject); */
+									var params = ('student_email='+student_email+'&advisor_email='+advisor_email+'&starttime='+starttime+'&endtime='+endtime);
 									var xmlhttp;
 									xmlhttp = new XMLHttpRequest();
 									xmlhttp.onreadystatechange=function(){
@@ -128,7 +140,7 @@
 											return false;
 										}
 									}
-									xmlhttp.open("POST","notify",true);
+									xmlhttp.open("POST","mail",true);
 									xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
 									xmlhttp.setRequestHeader("Content-length",params.length);
 									xmlhttp.setRequestHeader("Connection","close");
@@ -136,9 +148,10 @@
 								}
 								</script>
 					</div>
-					<%	}
-		    			}
-		    			%>
+					<%
+						}
+						}
+					%>
 					<!-- end processing advisors -->
 				</table>
 		</form>
@@ -160,17 +173,14 @@
 					<b>Start: </b><input type="label" name=start id="start" readonly><br>
 					<b>End: </b><input type="label" name=end id="end" readonly><br>
 					<b>Advisor: </b><input type="label" name=pname id="pname" readonly><br>
-					
-					
-					
-					
-					<b>Phone Number: </b> <input type="label" name=StudentPhoneNumber id="StudentPhoneNumber" readonly><br>
-					
-					
-					
-					<b>UTA Student ID: </b><br> <input type="label" name=studentid
-						id="studentid" readonly><br> <b>Description:</b><br>
-						<!-- added readonly for student ID on 30th March 2016 by Maithili -->
+					<input type="hidden" name="advisor_email" id="advisorEmail"
+						readonly> <input type="hidden" name="student_email"
+						id="studentEmail" readonly> <b>Phone Number: </b> <input
+						type="label" name=StudentPhoneNumber id="StudentPhoneNumber"
+						readonly><br> <b>UTA Student ID: </b><br> <input
+						type="label" name=studentid id="studentid" readonly><br>
+					<b>Description:</b><br>
+					<!-- added readonly for student ID on 30th March 2016 by Maithili -->
 					<textarea rows=4 columns="10" name=description id="description"></textarea>
 				</div>
 				<div class="modal-footer">
