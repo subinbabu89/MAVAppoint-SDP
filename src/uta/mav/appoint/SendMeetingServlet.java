@@ -55,15 +55,31 @@ public class SendMeetingServlet extends HttpServlet{
 			String advisor_email = request.getParameter("advisor_email");
 			String starttime = request.getParameter("starttime");
 			String endtime = request.getParameter("endtime");
-
+			//
+			System.out.println("to"+to);
+			System.out.println("advisor_email"+advisor_email);
+			System.out.println("starttime"+starttime);
+			System.out.println("endtime"+endtime);
 			//convert start and end times to correct format
-			String[] parts = starttime.split("T");
+			/*String[] parts = starttime.split(":");
 			String[] date = parts[0].split("-");
 			String[] start = parts[1].split(":");
 			starttime = date[0]+date[1]+date[2]+"T"+start[0]+start[1];
 			parts = endtime.split("T");
 			String[] end = parts[1].split(":");
-			endtime = date[0]+date[1]+date[2]+"T"+end[0]+end[1];
+			endtime = date[0]+date[1]+date[2]+"T"+end[0]+end[1];*/
+
+			/* 1. send date from jsp to servlet 
+				2. construct date time string as required 
+				3. same thing for end time */
+			/*data being sent from jsp*/
+			/*tomaithili.deshpande@mavs.uta.edu
+			advisor_emailmaithili.deshpande@mavs.uta.edu
+			starttime15:50:00
+			endtime16:00:00*/
+			String[] parts = starttime.split(":");
+			
+			
 
 			
 			String description = "This is a meeting request from Maverick Appointments. Please do not reply to this email.";
