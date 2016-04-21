@@ -6,24 +6,54 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import javax.crypto.SecretKey;
 
 import uta.mav.appoint.PrimitiveTimeSlot;
-import uta.mav.appoint.ScheduleAppointmentServlet;
 import uta.mav.appoint.TimeSlotComponent;
 import uta.mav.appoint.beans.AllocateTime;
 import uta.mav.appoint.beans.Appointment;
 import uta.mav.appoint.beans.AppointmentType;
-import uta.mav.appoint.beans.CreateAdvisorBean;
 import uta.mav.appoint.beans.GetSet;
-import uta.mav.appoint.beans.RegisterBean;
-import uta.mav.appoint.db.command.*;
-import uta.mav.appoint.flyweight.TimeSlotFlyweightFactory;
+import uta.mav.appoint.db.command.AddAppointmentType;
+import uta.mav.appoint.db.command.AddTimeSlot;
+import uta.mav.appoint.db.command.CheckTimeSlot;
+import uta.mav.appoint.db.command.CheckUser;
+import uta.mav.appoint.db.command.CreateAdvisor;
+import uta.mav.appoint.db.command.CreateGuestUser;
+import uta.mav.appoint.db.command.CreateProspectiveStudent;
+import uta.mav.appoint.db.command.CreateStudent;
+import uta.mav.appoint.db.command.CreateUser;
+import uta.mav.appoint.db.command.DeleteAdvisor;
+import uta.mav.appoint.db.command.DeleteTimeSlot;
+import uta.mav.appoint.db.command.GetAdminById;
+import uta.mav.appoint.db.command.GetAdvisorById;
+import uta.mav.appoint.db.command.GetAdvisorIdsOfDepartment;
+import uta.mav.appoint.db.command.GetAdvisors;
+import uta.mav.appoint.db.command.GetAppointment;
+import uta.mav.appoint.db.command.GetAppointmentById;
+import uta.mav.appoint.db.command.GetDepartmentByName;
+import uta.mav.appoint.db.command.GetDepartmentNames;
+import uta.mav.appoint.db.command.GetFacultyById;
+import uta.mav.appoint.db.command.GetMajors;
+import uta.mav.appoint.db.command.GetNotification;
+import uta.mav.appoint.db.command.GetStudentById;
+import uta.mav.appoint.db.command.GetUserIDByEmail;
+import uta.mav.appoint.db.command.NotifyEmail;
+import uta.mav.appoint.db.command.SQLCmd;
+import uta.mav.appoint.db.command.UpdateAdvisor;
+import uta.mav.appoint.db.command.UpdateAppointment;
+import uta.mav.appoint.db.command.UpdateAppointmentType;
+import uta.mav.appoint.db.command.UpdateUser;
 import uta.mav.appoint.helpers.EncryptionDecryptionAES;
 import uta.mav.appoint.helpers.HashingClass;
 import uta.mav.appoint.helpers.TimeSlotHelpers;
-import uta.mav.appoint.login.*;
+import uta.mav.appoint.login.AdminUser;
+import uta.mav.appoint.login.AdvisorUser;
+import uta.mav.appoint.login.Department;
+import uta.mav.appoint.login.FacultyUser;
+import uta.mav.appoint.login.GuestUser;
+import uta.mav.appoint.login.LoginUser;
+import uta.mav.appoint.login.ProspectiveStudent;
+import uta.mav.appoint.login.StudentUser;
 
 public class RDBImpl implements DBImplInterface {
 
@@ -128,9 +158,7 @@ public class RDBImpl implements DBImplInterface {
 			}
 			ResultSet res = statement.executeQuery();
 			while (res.next()) {
-				// Use flyweight factory to avoid build cost if possible
-				PrimitiveTimeSlot set = (PrimitiveTimeSlot) TimeSlotFlyweightFactory.getInstance()
-						.getFlyweight(res.getString(1) + "-" + res.getString(2), res.getString(3));
+				PrimitiveTimeSlot set = new PrimitiveTimeSlot();
 				set.setName(res.getString(1));
 				set.setDate(res.getString(2));
 				set.setStartTime(res.getString(3));
@@ -158,9 +186,7 @@ public class RDBImpl implements DBImplInterface {
 				statement.setString(1, advisorUsers.get(i).getPname());
 				ResultSet res = statement.executeQuery();
 				while (res.next()) {
-					// Use flyweight factory to avoid build cost if possible
-					PrimitiveTimeSlot set = (PrimitiveTimeSlot) TimeSlotFlyweightFactory.getInstance()
-							.getFlyweight(res.getString(1) + "-" + res.getString(2), res.getString(3));
+					PrimitiveTimeSlot set = new PrimitiveTimeSlot();
 					set.setName(res.getString(1));
 					set.setDate(res.getString(2));
 					set.setStartTime(res.getString(3));
@@ -276,8 +302,8 @@ public class RDBImpl implements DBImplInterface {
 				set.setStudentId(decrypted_studentID);
 				set.setStudentEmail(rs.getString(10));
 				set.setStudentPhoneNumber(rs.getString(11));
-				set.setColorType(rs.getString(12));//Added by Maithili
-				
+				set.setColorType(rs.getString(12));// Added by Maithili
+
 				Appointments.add(set);
 			}
 			conn.close();
@@ -296,9 +322,13 @@ public class RDBImpl implements DBImplInterface {
 			// String command = "SELECT
 			// User_Advisor.pname,User_Advisor.email,date,start,end,type,id,description,student_email
 			// FROM USER,Appointments,User_Advisor "
-			//Modified by Maithili for student id and phone number bug on 30th March 2016
-		//	String command = "SELECT User_Advisor.pname,User.email,date,start,end,type,id,description,student_email FROM USER,Appointments,User_Advisor "
-			//		+ "WHERE USER.email=? AND user.userid=Appointments.student_userid AND User_Advisor.userid=Appointments.advisor_userid";
+			// Modified by Maithili for student id and phone number bug on 30th
+			// March 2016
+			// String command = "SELECT
+			// User_Advisor.pname,User.email,date,start,end,type,id,description,student_email
+			// FROM USER,Appointments,User_Advisor "
+			// + "WHERE USER.email=? AND user.userid=Appointments.student_userid
+			// AND User_Advisor.userid=Appointments.advisor_userid";
 			String command = "SELECT User_Advisor.pname,User.email,date,start,end,type,id,description,student_email,student_cell,studentId FROM USER,Appointments,User_Advisor "
 					+ "WHERE USER.email=? AND user.userid=Appointments.student_userid AND User_Advisor.userid=Appointments.advisor_userid";
 			statement = conn.prepareStatement(command);
@@ -314,12 +344,14 @@ public class RDBImpl implements DBImplInterface {
 				set.setAppointmentType(rs.getString(6));
 				set.setAppointmentId(rs.getInt(7));
 				set.setDescription(rs.getString(8));
-				//commented to fix bug for student id on 30th March 2016 by Maithili
-				//set.setStudentId("Advisor only"); 
+				// commented to fix bug for student id on 30th March 2016 by
+				// Maithili
+				// set.setStudentId("Advisor only");
 				String decrypted_studentID = EncryptionDecryptionAES.decrypt(rs.getString(11));
-				set.setStudentId(decrypted_studentID); 
+				set.setStudentId(decrypted_studentID);
 				set.setStudentEmail(rs.getString(9));
-				//Added phone number to fix the bug on 30th March 2016 by Maithili
+				// Added phone number to fix the bug on 30th March 2016 by
+				// Maithili
 				set.setStudentPhoneNumber(rs.getString(10));
 				Appointments.add(set);
 			}
@@ -454,7 +486,7 @@ public class RDBImpl implements DBImplInterface {
 		try {
 			Connection conn = this.connectDB();
 			PreparedStatement statement;
-			//UPdated by Maithili
+			// UPdated by Maithili
 			String command = "SELECT type,duration,user.email,colortype FROM Appointment_Types ,User_Advisor,user WHERE Appointment_Types.userid=User_Advisor.userid AND User_Advisor.userid=user.userid AND User_Advisor.pname=?";
 			statement = conn.prepareStatement(command);
 			statement.setString(1, pname);
@@ -652,14 +684,12 @@ public class RDBImpl implements DBImplInterface {
 		}
 	}
 
-		
-
 	@Override
 	public Boolean notifyEmail(LoginUser lu, String en) throws SQLException {
 		try {
 			int userId;
 			userId = lu.getUserId();
-			
+
 			SQLCmd cmd = new NotifyEmail(userId, en);
 
 			System.out.println("hoda is !the best" + userId + en);
@@ -682,14 +712,15 @@ public class RDBImpl implements DBImplInterface {
 			System.out.println("Somethign else" + userId);
 			System.out.println("before return  GetNotif class....");
 			cmd.execute();
-			System.out.println("after exec etNotif class...."+(String) cmd.getResult().get(0));
+			System.out.println("after exec etNotif class...." + (String) cmd.getResult().get(0));
 			return (String) cmd.getResult().get(0);
 		} catch (Exception sq) {
 			System.out.printf(sq.toString());
 		}
 		return null;
 	}
-//Added by Maithili
+
+	// Added by Maithili
 	@Override
 	public Boolean createGuestUser(GuestUser guestUser) {
 		try {
@@ -713,16 +744,16 @@ public class RDBImpl implements DBImplInterface {
 			SQLCmd cmd = new CreateUser(prospectiveStudent);
 			cmd.execute();
 			System.out.println("Created prospective User" + cmd.getResult());
-	
+
 			cmd = new CreateProspectiveStudent(prospectiveStudent);
 			cmd.execute();
 			System.out.println(cmd.getResult());
 			return (Boolean) cmd.getResult().get(0);
 		} catch (Exception e) {
-		System.out.println(e + " -- Found In -- " + this.getClass().getName());
-		return false;
+			System.out.println(e + " -- Found In -- " + this.getClass().getName());
+			return false;
 		}
-		}
+	}
 
 	public String updateAppointmentType(LoginUser user, AppointmentType at) {
 		// TODO Auto-generated method stub
