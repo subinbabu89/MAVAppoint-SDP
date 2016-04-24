@@ -156,5 +156,21 @@ public class DatabaseManager {
 		// TODO Auto-generated method stub
 		return imp.updateAppointmentType(user,at);
 	}
+	
+	//added by Rudresh
+	
+	public Boolean resetPassword(LoginUser loginUser) {
+		// TODO Auto-generated method stub
+		return imp.resetPassword(loginUser);
+		
+	}
+	
+	//added by rudresh to check if the user exist.
+	public Boolean checkUserExist(LoginUser loginUser){
+		
+		return imp.checkUserExist(loginUser);
+	}
+	
+	
 }
 

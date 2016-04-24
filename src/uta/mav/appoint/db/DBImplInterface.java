@@ -51,4 +51,6 @@ public interface DBImplInterface {
 	public String updateAppointmentType(LoginUser user, AppointmentType at);//Added by Maithili
 	public Boolean createGuestUser(GuestUser guestUser);
 	public Boolean createProspectiveStudent(ProspectiveStudent prospectiveStudent);
+	public Boolean resetPassword(LoginUser loginUser);
+	public Boolean checkUserExist(LoginUser loginUser);
 }

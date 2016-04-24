@@ -26,6 +26,7 @@ public class LoginServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		session = request.getSession();
 		session.setAttribute("message", "");
+		session.setAttribute("accMessage", ""); 
 		request.getRequestDispatcher("/WEB-INF/jsp/views/login.jsp").forward(request,response);
 	}
 	

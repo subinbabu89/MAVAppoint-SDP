@@ -105,12 +105,23 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>SendEmailServlet</servlet-name>
-    <servlet-class>uta.mav.appoint.SendEmailServlet</servlet-class>
+    <servlet-class>uta.mav.appoint.SendEmailServlet</servlet-class> 
   </servlet>
   <servlet-mapping>
     <servlet-name>SendEmailServlet</servlet-name>
     <url-pattern>/notify</url-pattern>
   </servlet-mapping>
+  
+   <servlet>
+    <servlet-name>ResetPasswordServlet</servlet-name>
+    <servlet-class>uta.mav.appoint.ResetPasswordServlet</servlet-class> 
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ResetPasswordServlet</servlet-name>
+    <url-pattern>/forgotPasswordAction</url-pattern>
+  </servlet-mapping>
+  
+  
   <servlet>
     <servlet-name>SendMeetingServlet</servlet-name>
     <servlet-class>uta.mav.appoint.SendMeetingServlet</servlet-class>
@@ -176,20 +187,19 @@
     <url-pattern>/delete_advisor</url-pattern>
   </servlet-mapping>
   <servlet>
-		<servlet-name>AdvisorAppointmentServlet</servlet-name>
-		<servlet-class>uta.mav.appoint.AdvisorAppointmentServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>AdvisorAppointmentServlet</servlet-name>
-		<url-pattern>/advisorbookappointment</url-pattern>
-	</servlet-mapping>
-	<servlet>
-	<servlet-name>AdminAdvisingServlet</servlet-name>
-		<servlet-class>uta.mav.appoint.AdminAdvisingServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>AdminAdvisingServlet</servlet-name>
-		<url-pattern>/adminadvising</url-pattern>
-	</servlet-mapping>
-  
+    <servlet-name>AdvisorAppointmentServlet</servlet-name>
+    <servlet-class>uta.mav.appoint.AdvisorAppointmentServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AdvisorAppointmentServlet</servlet-name>
+    <url-pattern>/advisorbookappointment</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>AdminAdvisingServlet</servlet-name>
+    <servlet-class>uta.mav.appoint.AdminAdvisingServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AdminAdvisingServlet</servlet-name>
+    <url-pattern>/adminadvising</url-pattern>
+  </servlet-mapping>
 </web-app>
