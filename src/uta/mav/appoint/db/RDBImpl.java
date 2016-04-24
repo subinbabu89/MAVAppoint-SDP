@@ -15,6 +15,7 @@ import uta.mav.appoint.beans.AppointmentType;
 import uta.mav.appoint.beans.GetSet;
 import uta.mav.appoint.db.command.AddAppointmentType;
 import uta.mav.appoint.db.command.AddTimeSlot;
+import uta.mav.appoint.db.command.CheckIfUserExist;
 import uta.mav.appoint.db.command.CheckTimeSlot;
 import uta.mav.appoint.db.command.CheckUser;
 import uta.mav.appoint.db.command.CreateAdvisor;
@@ -38,6 +39,7 @@ import uta.mav.appoint.db.command.GetNotification;
 import uta.mav.appoint.db.command.GetStudentById;
 import uta.mav.appoint.db.command.GetUserIDByEmail;
 import uta.mav.appoint.db.command.NotifyEmail;
+import uta.mav.appoint.db.command.ResetPassword;
 import uta.mav.appoint.db.command.SQLCmd;
 import uta.mav.appoint.db.command.UpdateAdvisor;
 import uta.mav.appoint.db.command.UpdateAppointment;
@@ -62,7 +64,7 @@ public class RDBImpl implements DBImplInterface {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			String jdbcUrl = "jdbc:mysql://localhost:3306/mavs";
 			String userid = "root";
-			String password = "admin";
+			String password = "";
 			Connection conn = DriverManager.getConnection(jdbcUrl, userid, password);
 			return conn;
 		} catch (Exception e) {
@@ -763,5 +765,34 @@ public class RDBImpl implements DBImplInterface {
 		cmd = new UpdateAppointmentType(at, (int) cmd.getResult().get(0));
 		cmd.execute();
 		return (String) cmd.getResult().get(0);
+	}
+
+	// added by Rudresh
+	@Override
+	public Boolean resetPassword(LoginUser loginUser) {
+		// better to fetch the id first of the user and then query the database. String queries take more amount of time.
+		SQLCmd cmd1 = new GetUserIDByEmail(loginUser.getEmail());
+		cmd1.execute();
+		System.out.println("Ashe kashe"+(int)cmd1.getResult().get(0));
+		loginUser.setUserId((int)cmd1.getResult().get(0));
+		SQLCmd cmd = new ResetPassword(loginUser);
+		cmd.execute();
+		
+		System.out.println("From RDBImpl");
+		return true;
+		
+	}
+
+	// Added By Rudresh
+	@Override
+	public Boolean checkUserExist(LoginUser loginUser) {
+		
+		SQLCmd cmd = new CheckIfUserExist(loginUser);
+		cmd.execute();
+		if (cmd.getResult().isEmpty()){
+			return true;
+		}else{
+			return false;
+		}
 	}
 }

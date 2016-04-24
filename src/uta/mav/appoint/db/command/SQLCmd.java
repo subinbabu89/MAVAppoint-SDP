@@ -33,7 +33,7 @@ public abstract class SQLCmd {
 	    Class.forName("com.mysql.jdbc.Driver").newInstance();
 	    String jdbcUrl = "jdbc:mysql://localhost:3306/mavs";
 	    String userid = "root";
-	    String password = "admin";
+	    String password = "";
 	    conn = DriverManager.getConnection(jdbcUrl,userid,password);
 	    }
 	    catch (Exception e){
