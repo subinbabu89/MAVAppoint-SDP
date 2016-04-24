@@ -38,6 +38,7 @@
 		    			if (schedule != null){%>
 <script>
 		    				$(document).ready(function(){
+		    					
 		    					$('#calendar').fullCalendar({
 		    						defaultView : 'basicDay',
 		    						viewRender: function(view, element){
@@ -54,6 +55,7 @@
 		    							document.getElementById("duration").value = '<%=request.getParameter("duration")%>';
 		    							document.getElementById("pname").value = '<%=request.getParameter("pname")%>';
 		    							document.getElementById("advisor_email").value = '<%=request.getParameter("advisor_email")%>';
+		    							
 		    							document.getElementById("start").value = event.start;
 		    							document.getElementById("end").value = event.end;
 		    							document.getElementById("starttime").value = event.start.format();
@@ -79,7 +81,8 @@
 					<h4 class="modal-title" id=addApptTypeLabel">Add Appointment</h4>
 				</div>
 				<div class="modal-body">
-					<input type="hidden" name=id2 id="id2"> <input
+					<input type="hidden" name=id2 id="id2"> 
+					<input
 						type="hidden" name=apptype id="apptype"> <input
 						type="hidden" name=start id="start"> <input type="hidden"
 						name=end id="end"> <input type="hidden" name=starttime
@@ -88,7 +91,11 @@
 					<input type="hidden" name=duration id="duration"> <input
 						type="hidden" name=advisor_email id="advisor_email" required> Email
 					address: <br> <input type="text" name="email" id="email"
-						value="<%= user.getEmail()%>" required><br> UTA Student ID: <br>
+						value="<%= user.getEmail()%>" required>
+						
+						<input type="hidden" name="stuEmail" id="stuEmail" value="<%= user.getEmail()%>">
+						
+						<br> UTA Student ID: <br>
 					<input type="text" name="studentid" required> <br> Phone
 					Number: <br> <input type="text" name="phoneNumber" required> <br>
 					Description: <br>
@@ -97,8 +104,9 @@
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">
 						Close</button>
-					<input type="submit" value="Submit"
-						onclick="javascript:FormSubmit();">
+					<input type="submit" value="Submit">
+						<!-- onclick="javascript:FormSubmit();" -->
+						
 				</div>
 			</div>
 		</div>
@@ -110,11 +118,11 @@
 }
 </style>
 <script> function FormSubmit(){
+	alert("in form submit");
 									var student_email = document.getElementById("email").value;
 									var advisor_email = document.getElementById("advisor_email").value;
 									var starttime = document.getElementById("starttime").value;
-									
-									
+														
 									
 									var phoneNumber = document.getElementById("phoneNumber").value;
 									

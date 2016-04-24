@@ -13,6 +13,7 @@ import uta.mav.appoint.beans.Appointment;
 import uta.mav.appoint.beans.AppointmentType;
 import uta.mav.appoint.db.DatabaseManager;
 import uta.mav.appoint.login.LoginUser;
+import uta.mav.appoint.email.AppointmentEmail;
 import uta.mav.appoint.email.Email;
 
 public class ScheduleAppointmentServlet extends HttpServlet{
@@ -70,6 +71,8 @@ public class ScheduleAppointmentServlet extends HttpServlet{
 			int d = Integer.parseInt(request.getParameter("duration"));
 			String[] parts = (request.getParameter("start")).split(" ");
 			a.setAdvisingDate(parts[3] + "-" + convertDate(parts[1]) + "-" + parts[2]);
+			
+			
 			parts = parts[4].split(":");
 			a.setAdvisingStartTime(parts[0] + ":" + parts[1]);
 			a.setAdvisingEndTime(addTime(parts[0],parts[1],d));
@@ -94,8 +97,14 @@ public class ScheduleAppointmentServlet extends HttpServlet{
 				String mess = ",\nAn appointment has been set for " + a.getAdvisingDate()
 				+ " at " + a.getAdvisingStartTime() + " - " + a.getAdvisingEndTime()
 				+ "\nAppoint ID: " + a.getAppointmentId();
-				Email newMail = new Email(sub,mess,email);
-				newMail.sendMail();
+				
+				
+				
+				
+				
+				/*Email newMail = new Email(sub,mess,email);
+				newMail.sendMail();*/
+				
 			}
 			else{
 				response.setHeader("Refresh","2; URL=advising");

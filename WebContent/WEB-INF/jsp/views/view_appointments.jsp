@@ -85,7 +85,7 @@
 						<td class="text-center"><button type="button" id=button2_
 								<%=i%> onclick="button_<%=i%>()">Edit</button></td>
 						<td class="text-center"><button type="button" id=button3_
-								<%=i%> onclick="button__<%=i%>()">Email</button></td>
+								<%=i%> onclick="button__<%=i%>()">Sync</button></td>
 					</tr>
 					<script> function button<%=i%>(){
 										document.getElementById("cancel_button").value = "<%=array.get(i).getAppointmentId()%>"; 
@@ -105,10 +105,6 @@
 										//added element for student id on 30th March 2016 by Maithili
 										//<Hien>
 										document.getElementById("StudentPhoneNumber").value = "<%=array.get(i).getStudentPhoneNumber()%>";
-										
-										
-										
-										
 										
 										$('#addApptModal').modal();
 								}</script>
@@ -136,7 +132,7 @@
 									xmlhttp = new XMLHttpRequest();
 									xmlhttp.onreadystatechange=function(){
 										if (xmlhttp.readyState==4){
-											alert("Email sent.");	
+											/* alert("Email sent."); */	
 											return false;
 										}
 									}
@@ -147,6 +143,7 @@
 									xmlhttp.setRequestHeader("Content-length",params.length);
 									xmlhttp.setRequestHeader("Connection","close");
 									xmlhttp.send(params);
+									alert("Email sent");
 								}
 								</script>
 					</div>
@@ -199,18 +196,14 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h4 class="modal-title">Send message</h4>
+					<h4 class="modal-title">Send Email</h4>
 				</div>
 				<div class="modal-body">
-					<b>Subject:</b><br> <input type=text name=subject id="subject"><br>
-					<b>Message:</b><br>
-					<textarea rows=4 columns="10" name=email id="email"></textarea>
-					<br> <input type=hidden name=to id="to"><br>
+					<b>Sync Outlook calendar with MavAppoint?<br>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">
-						Close</button>
-					<input type="submit" value="Submit">
+					<button type="button" class="btn btn-default" data-dismiss="modal"> Cancel </button>
+					<input  type="submit" value="OK">
 				</div>
 			</div>
 		</div>
