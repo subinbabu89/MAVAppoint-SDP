@@ -89,8 +89,8 @@ public class ManageAppointmentServlet extends HttpServlet{
 						+ " at " + a.getAdvisingStartTime() + " - " + a.getAdvisingEndTime()
 						+ "\nAppoint ID: " + a.getAppointmentId();
 						String email = a.getStudentEmail();
-						Email newMail = new Email(sub,mess + email,email);
-						newMail.sendMail();
+						/*Email newMail = new Email(sub,mess + email,email);
+						newMail.sendMail();*/
 					}
 					else{
 						response.setHeader("Refresh","2; URL=appointments");

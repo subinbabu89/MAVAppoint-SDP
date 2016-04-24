@@ -115,7 +115,7 @@
 					<script> function button__<%=i%>(){
 										document.getElementById("start").value = "<%=array.get(i).getAdvisingStartTime()%>"; 
 										document.getElementById("end").value = "<%=array.get(i).getAdvisingEndTime()%>"; 
-										<%-- document.getElementById("to").value = "<%=array.get(i).getStudentEmail()%>"; --%>
+										document.getElementById("date").value = "<%=array.get(i).getAdvisingDate()%>";
 										document.getElementById("advisorEmail").value = "<%=array.get(i).getAdvisorEmail()%>";
 										document.getElementById("studentEmail").value = "<%=array.get(i).getStudentEmail()%>";
 										$('#emailModal').modal();
@@ -126,12 +126,12 @@
 									var advisor_email = document.getElementById("advisorEmail").value;
 									var starttime = document.getElementById("start").value;
 									var endtime = document.getElementById("end").value;
-									
+									var date = document.getElementById("date").value;
 									/* var to = document.getElementById("to").value;
 									var body = document.getElementById("email").value;
 									var subject = document.getElementById("subject").value; 
 									var params = ('to='+to+'&body='+body+'&subject='+subject); */
-									var params = ('student_email='+student_email+'&advisor_email='+advisor_email+'&starttime='+starttime+'&endtime='+endtime);
+									var params = ('student_email='+student_email+'&advisor_email='+advisor_email+'&starttime='+starttime+'&endtime='+endtime+'&date='+date);
 									var xmlhttp;
 									xmlhttp = new XMLHttpRequest();
 									xmlhttp.onreadystatechange=function(){
@@ -140,7 +140,9 @@
 											return false;
 										}
 									}
+									
 									xmlhttp.open("POST","mail",true);
+									
 									xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
 									xmlhttp.setRequestHeader("Content-length",params.length);
 									xmlhttp.setRequestHeader("Connection","close");
