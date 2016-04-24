@@ -16,6 +16,7 @@ import uta.mav.appoint.beans.Appointment;
 import uta.mav.appoint.beans.AppointmentType;
 import uta.mav.appoint.db.DatabaseManager;
 import uta.mav.appoint.login.LoginUser;
+import uta.mav.appoint.email.AppointmentEmail;
 import uta.mav.appoint.email.Email;
 import uta.mav.appoint.helpers.EncryptionDecryptionAES;
 
@@ -77,6 +78,11 @@ public class ScheduleAppointmentServlet extends HttpServlet{
 			String email = request.getParameter("email");
 			DatabaseManager dbm = new DatabaseManager();
 			
+			String appDate = a.getAdvisingDate();
+			String sTime = a.getAdvisingStartTime();
+			String eTime = a.getAdvisingEndTime();
+			String stuEmail = request.getParameter("stuEmail");
+			String advEmail= request.getParameter("advisor_email");
 			
 			
 			
@@ -98,6 +104,12 @@ public class ScheduleAppointmentServlet extends HttpServlet{
 				+ " at " + a.getAdvisingStartTime() + " - " + a.getAdvisingEndTime()
 				+ "\nAppoint ID: " + a.getAppointmentId();
 				Email newMail = new Email(sub,mess,email);
+				
+				
+/*				AppointmentEmail ae = new AppointmentEmail(appDate,sTime,eTime,stuEmail,advEmail);*/
+				
+				
+				
 				System.out.println("before if !!!!!!!!!!!!!!!!!...");
 				
 				
@@ -111,6 +123,8 @@ public class ScheduleAppointmentServlet extends HttpServlet{
 				if(emailnotification.equalsIgnoreCase("true")){
 				System.out.println("Sending email...");
 				newMail.sendMail();
+				
+				/*ae.sendEmail();*/
 				}
 				else
 				{
