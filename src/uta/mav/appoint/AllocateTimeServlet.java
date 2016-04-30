@@ -87,6 +87,7 @@ public class AllocateTimeServlet extends HttpServlet {
 			out.write(msg);
 			out.flush();
 			out.close();
+			
 			for (int i=0;i<rep;i++){
 				at.setDate(TimeSlotHelpers.addDate(at.getDate(),1));
 				user.accept(v,(Object)at);
