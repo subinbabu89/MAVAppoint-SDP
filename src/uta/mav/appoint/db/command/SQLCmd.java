@@ -1,9 +1,11 @@
 package uta.mav.appoint.db.command;
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Properties;
 /*
  * SQLCmd -> implements command and template patterns
  */
@@ -15,6 +17,9 @@ public abstract class SQLCmd {
 	public abstract void queryDB();
 	public abstract void processResult();
 	
+	String filename = "config.properties";
+	Properties properties = new Properties();
+	InputStream inputStream = null;
 	public void execute(){
 		try{
 			connectDB();
@@ -31,10 +36,17 @@ public abstract class SQLCmd {
 		try
 	    {
 	    Class.forName("com.mysql.jdbc.Driver").newInstance();
-	    String jdbcUrl = "jdbc:mysql://localhost:3306/mavs";
-	    String userid = "root";
-	    String password = "";
-	    conn = DriverManager.getConnection(jdbcUrl,userid,password);
+	    
+	 
+		inputStream = SQLCmd.class.getClassLoader().getResourceAsStream(filename);
+		if(inputStream==null){
+	            System.out.println("Sorry, unable to find " + filename);
+		    return;
+		}
+
+		properties.load(inputStream);
+	    
+	    conn = DriverManager.getConnection( properties.getProperty("jdbcUrl"), properties.getProperty("userid"), properties.getProperty("databasePass"));
 	    }
 	    catch (Exception e){
 	        System.out.println(e.toString());

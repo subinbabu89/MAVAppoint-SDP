@@ -1,6 +1,7 @@
 package uta.mav.appoint;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.Properties;
 
@@ -21,44 +22,37 @@ public class SendEmailServlet extends HttpServlet{
 	 * 
 	 */
 	private static final long serialVersionUID = -969978370422916362L;
+	String filename = "config.properties";
+	Properties properties = new Properties();
+	InputStream inputStream = null;
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		try{
 		String to = (String)request.getParameter("to");
 		String subject = (String)request.getParameter("subject");
 		String body = (String)request.getParameter("body");
-		//String from = "teststudent@mavs.uta.com";
-		//String pw = "sFre192R!";
-		String from = "mavappoint.donotreply@gmail.com";
-		String pw = "mavappointemail";
-		String host = "smtp.gmail.com";
-		String port = "465";
-		Properties properties = System.getProperties();
-		properties.put("mail.smtp.starttls.enable","true");
-		properties.put("mail.smtp.host",host);
-		properties.put("mail.smtp.user",from);
-		properties.put("mail.smtp.password",pw);
-		properties.put("mail.smtp.port",port);
-		properties.put("mail.smtp.auth","true");
-		properties.put("mail.smtp.socketFactory.port","465");
-		properties.put("mail.smtp.socketFactory.class",
-						"javax.net.ssl.SSLSocketFactory");
 		
-		
-		
+		inputStream = SendEmailServlet.class.getClassLoader().getResourceAsStream(filename);
+		if(inputStream==null){
+	            System.out.println("Sorry, unable to find " + filename);
+		    return;
+		}
+
+		properties.load(inputStream);
+			
 		Session session = Session.getDefaultInstance(properties,
 				new javax.mail.Authenticator(){
 					protected PasswordAuthentication getPasswordAuthentication(){
 						//modified to fix the bug : send email on clicking on 
 						//"Email" button in appointments page - on March 30, 2016. by Sahana
 						//return new PasswordAuthentication("maverickappointments@gmail.com","sFre192R!");
-						return new PasswordAuthentication("mavappoint.donotreply@gmail.com","mavappointemail");
+						return new PasswordAuthentication(properties.getProperty("mail.smtp.user"),properties.getProperty("mail.smtp.password"));
 					}
 		});
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 			javax.mail.Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress(from));
+			message.setFrom(new InternetAddress(properties.getProperty("mail.smtp.user")));
 			message.addRecipient(Message.RecipientType.TO,new InternetAddress(to));
 			message.setText(body);
 			message.setSubject(subject);
