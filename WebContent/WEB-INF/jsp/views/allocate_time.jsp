@@ -77,7 +77,7 @@
 //												 backgroundColor: 'orange' 
 //												Updated by Maithili
  												backgroundColor: '<%=appointments.get(i-1).getColorType()%>'
- 											}
+		 									}
 		 									
  											<%if(i != (appointments.size()-1)){%>,<%}
  										}
@@ -94,7 +94,7 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h4 class="modal-title" id="addTimeSlotLabel">Add Time Slots</h4>
+					<h4 class="modal-title" id="addTimeSlotLabel">Add Schedule</h4>
 				</div>
 				<div class="modal-body">
 					<label for="starttime">Start Time:</label> <input type="time"
@@ -103,9 +103,9 @@
 						class="form-control" name=endtime id="endtime" step="300">
 					<label for="opendate">Date:</label> <input type="text"
 						class="form-control" name=opendate id="opendate"> <label
-						for="repeat">Weekly repeat duration:</label> <input type="text"
-						class="form-control" name=repeat id="repeat" value="0"> <label
-						id="result"><font style="color: #e67e22" size="4"></label>
+						for="repeat">Weekly repeat duration:</label> 
+						<input type="text" class="form-control" name=repeat id="repeat" value="0"> 
+						<label id="result"><font style="color: #e67e22" size="4"></label>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">
@@ -123,8 +123,7 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h4 class="modal-title" id="deleteTimeSlotTitle">Delete Time
-						Slot</h4>
+					<h4 class="modal-title" id="deleteTimeSlotTitle">Manage Advising Schedule</h4>
 				</div>
 				<div class="modal-body">
 					<label for="StartTime">Start Time:</label> <input type="time"
@@ -132,15 +131,18 @@
 					<label for="EndTime">End Time:</label> <input type="time"
 						class="form-control" name=EndTime2 id="EndTime2" step="300">
 					<label for="Date">Date:</label> <input type="date"
-						class="form-control" name=Date id="Date"> <input
+						class="form-control" name=Date id="Date"> 
+						<label for="repeat">Weekly repeat duration:</label> 
+						<input type="text" class="form-control" name="repeatManage" id="repeatMng" value="0">
+						<input
 						type="hidden" name=pname id="pname"> <label id="result2"><font
 						style="color: #e67e22" size="4"></font></label>
 				</div>
+				
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">
-						Close</button>
-					<input type="submit" value="submit"
-						onclick="javascript:validate();">
+					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="javascript:editSchedule();"> Edit</button>
+					<input type="submit" value="Delete" class="btn btn-default" onclick="javascript:validate();">
+					<button type="button" class="btn btn-default" data-dismiss="modal"> Close</button>
 				</div>
 			</div>
 		</div>
@@ -168,6 +170,37 @@
 								}
 
 					</script>
+					<script>
+					function editSchedule(){
+						var valid = confirm('Are you sure you want to edit your schedule?');
+						if (valid == true){
+							var starttime = document.getElementById("StartTime2").value;
+							var endtime = document.getElementById("EndTime2").value;
+							var date = document.getElementById("Date").value;
+							var pname = document.getElementById("pname").value;
+							var repeatManage = document.getElementById("repeatMng").value;
+							var params = ('StartTime2='+starttime+'&EndTime2='+endtime+'&Date='+date+'&pname='+pname+'&repeatManage='+repeatManage);
+							console.log("Params" + params);
+							var xmlhttp;
+							xmlhttp = new XMLHttpRequest();
+							xmlhttp.onreadystatechange=function(){
+								if (xmlhttp.readyState==4){
+									document.getElementById("result2").innerHTML = xmlhttp.responseText;	
+								}
+							}
+							xmlhttp.open("POST","editSchedule",true);
+							xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+							xmlhttp.setRequestHeader("Content-length",params.length);
+							xmlhttp.setRequestHeader("Connection","close");
+							xmlhttp.send(params);
+							document.getElementById("result2").innerHTML = "Attempting to edit the schedule...";
+							return true;
+						}
+						else {
+							return false;
+						}
+					}
+					</script>
 <script>
 	function validate(){
 		var valid = confirm('Are you sure you want to delete?');	
@@ -189,7 +222,7 @@
 			xmlhttp.setRequestHeader("Content-length",params.length);
 			xmlhttp.setRequestHeader("Connection","close");
 			xmlhttp.send(params);
-			document.getElementById("result2").innerHTML = "Attempting to delete time slot...";
+			document.getElementById("result2").innerHTML = "Attempting to delete...";
 			return true;
 		}
 		else {

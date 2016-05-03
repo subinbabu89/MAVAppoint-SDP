@@ -192,4 +192,13 @@
 		<url-pattern>/adminadvising</url-pattern>
 	</servlet-mapping>
   
+  <servlet>
+    <servlet-name>EditAdvisingScheduleServlet</servlet-name>
+    <servlet-class>uta.mav.appoint.EditAdvisingScheduleServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EditAdvisingScheduleServlet</servlet-name>
+    <url-pattern>/editSchedule</url-pattern>
+  </servlet-mapping>
+  
 </web-app>

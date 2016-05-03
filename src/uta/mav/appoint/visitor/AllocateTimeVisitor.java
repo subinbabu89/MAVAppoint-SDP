@@ -12,7 +12,7 @@ public class AllocateTimeVisitor extends Visitor{
 	public ArrayList<Object> check(AdvisorUser user,Object o){
 		try{
 			DatabaseManager dbm = new DatabaseManager();
-			user.setMsg(dbm.addTimeSlot((AllocateTime)o));
+			//user.setMsg(dbm.addTimeSlot((AllocateTime)o));
 			return null;
 		}
 		catch(Exception e){
