@@ -37,7 +37,7 @@ public class RegisterServlet extends HttpServlet {
 	private String email, phoneNumber, encryptedPassword;//
 	int noOfCAPSAlpha = 1;
 	int noOfDigits = 1;
-	int noOfSplChars = 1;
+	int noOfSplChars = 0;
 	int minLen = 8;
 	int maxLen = 12;
 	HttpSession session;

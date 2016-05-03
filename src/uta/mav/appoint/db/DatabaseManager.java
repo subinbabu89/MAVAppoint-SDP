@@ -83,8 +83,8 @@ public class DatabaseManager {
 		return imp.cancelAppointment(id);
 	}
 	
-	public String addTimeSlot(AllocateTime at) throws SQLException{
-		return imp.addTimeSlot(at);
+	public String addTimeSlot(AllocateTime at,String hash1,String hash2) throws SQLException{
+		return imp.addTimeSlot(at,hash1,hash2);
 	}
 	
 	public ArrayList<AppointmentType> getAppointmentTypes(String pname) throws SQLException{

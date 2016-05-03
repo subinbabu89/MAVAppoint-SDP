@@ -10,7 +10,6 @@
 					Appointments</font> </a></li>
 					<li><a href="advisorbookappointment">
 					<font style="color: #e67e22" size="3">Book appointment for student</font></a></li>
-		<li><a href="customize"><font style="color: #e67e22" size="3">Customize
-					Settings</font></a></li>
-		<li><a href="notifyEmail"><font style="color: #e67e22" size="3">Email Notification</font></a></li>
+		<li><a href="customize"><font style="color: #e67e22" size="3">Appointment Type</font></a></li>
+		<li><a href="notifyEmail"><font style="color: #e67e22" size="3">Customize Settings</font></a></li>
 <!-- Modified by Maithili on 3rd April for email notification setting for advisors -->

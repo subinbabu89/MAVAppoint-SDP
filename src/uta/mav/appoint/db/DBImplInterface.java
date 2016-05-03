@@ -27,7 +27,7 @@ public interface DBImplInterface {
 	public ArrayList<String> getAdvisors() throws SQLException;
 	public AdvisorUser getAdvisor(String email) throws SQLException;
 	public LoginUser checkUser(GetSet set) throws SQLException;
-	public String addTimeSlot(AllocateTime at) throws SQLException;
+	public String addTimeSlot(AllocateTime at,String hash1,String hash2) throws SQLException;
 	public Connection connectDB();
 	public ArrayList<AppointmentType> getAppointmentTypes(String pname) throws SQLException;
 	public Boolean updateAppointment(Appointment a);

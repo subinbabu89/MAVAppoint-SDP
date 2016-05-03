@@ -428,14 +428,14 @@ public class RDBImpl implements DBImplInterface {
 		return result;
 	}
 
-	public String addTimeSlot(AllocateTime at) {
+	public String addTimeSlot(AllocateTime at,String hash1,String hash2) {
 		SQLCmd cmd = new GetUserIDByEmail(at.getEmail());
 		cmd.execute();
 		int id = (int) cmd.getResult().get(0);
 		cmd = new CheckTimeSlot(at, id);
 		cmd.execute();
 		if ((Boolean) cmd.getResult().get(0) == true) {
-			cmd = new AddTimeSlot(at, id);
+			cmd = new AddTimeSlot(at, id,hash1,hash2);
 			cmd.execute();
 			return (String) cmd.getResult().get(0);
 		} else {
@@ -510,10 +510,13 @@ public class RDBImpl implements DBImplInterface {
 	}
 
 	public Boolean deleteTimeSlot(AllocateTime at) {
-		Boolean b;
-		SQLCmd cmd = new DeleteTimeSlot(at);
+		SQLCmd cmd = new GetUserIDByEmail(at.getEmail());
 		cmd.execute();
-		b = (Boolean) (cmd.getResult()).get(0);
+		Integer id = (Integer) cmd.getResult().get(0);
+		Boolean b;
+		SQLCmd cmd1 = new DeleteTimeSlot(at,id);
+		cmd1.execute();
+		b = (Boolean) (cmd1.getResult()).get(0);
 		return b;
 	}
 

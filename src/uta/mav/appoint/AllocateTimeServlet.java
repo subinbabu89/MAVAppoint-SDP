@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import uta.mav.appoint.beans.AllocateTime;
 import uta.mav.appoint.db.DatabaseManager;
+import uta.mav.appoint.email.RandomPasswordGenerator;
 import uta.mav.appoint.helpers.TimeSlotHelpers;
 import uta.mav.appoint.login.AdvisorUser;
 import uta.mav.appoint.login.LoginUser;
@@ -22,6 +23,11 @@ import uta.mav.appoint.visitor.Visitor;
 public class AllocateTimeServlet extends HttpServlet {
 	HttpSession session;
 	String header;
+	int noOfCAPSAlpha = 1;
+	int noOfDigits = 1;
+	int noOfSplChars = 1;
+	int minLen = 20;
+	int maxLen = 40;
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		session = request.getSession();
@@ -33,6 +39,8 @@ public class AllocateTimeServlet extends HttpServlet {
 					ArrayList<TimeSlotComponent> schedules = dbm.getAdvisorSchedule(user.getPname());
 					if (schedules.size() != 0){
 						session.setAttribute("schedules", schedules);
+					}else{
+						session.setAttribute("schedules", null);
 					}
 					Visitor v = new AppointmentVisitor();
 					ArrayList<Object> appointments = user.accept(v,null);
@@ -76,8 +84,14 @@ public class AllocateTimeServlet extends HttpServlet {
 		at.setStartTime(startTime);
 		at.setEmail(user.getEmail());
 		try{
-			Visitor v = new AllocateTimeVisitor();
-			user.accept(v,(Object)at);
+/*			Visitor v = new AllocateTimeVisitor();
+			user.accept(v,(Object)at);*/
+			char[] tempValue = RandomPasswordGenerator.generatePswd(minLen, maxLen, noOfCAPSAlpha, noOfDigits,noOfSplChars);
+			String firstHash = tempValue.toString();
+			String previousHash = "0"; 
+			
+			DatabaseManager dbm = new DatabaseManager(); 
+			dbm.addTimeSlot(at,previousHash,firstHash);
 			String msg = user.getMsg();
 			response.setContentType("text/plain");
 			response.setHeader("Cache-Control", "no-cache");
@@ -89,8 +103,12 @@ public class AllocateTimeServlet extends HttpServlet {
 			out.close();
 			
 			for (int i=0;i<rep;i++){
+				char[] tempValue2 = RandomPasswordGenerator.generatePswd(minLen, maxLen, noOfCAPSAlpha, noOfDigits,noOfSplChars);
+				String nextHash = tempValue2.toString();
+				
 				at.setDate(TimeSlotHelpers.addDate(at.getDate(),1));
-				user.accept(v,(Object)at);
+				/*user.accept(v,(Object)at);*/
+				dbm.addTimeSlot(at,firstHash,nextHash);
 				msg = user.getMsg();
 				response.setContentType("text/plain");
 				response.setHeader("Cache-Control", "no-cache");
