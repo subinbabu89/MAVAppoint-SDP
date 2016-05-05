@@ -30,6 +30,7 @@ public class DeleteTimeSlot extends SQLCmd {
 
 		processHash();
 		deleteSlots();
+		deleteAppointments(userId,date);
 		/*
 		 * try{
 		 * 
@@ -41,6 +42,23 @@ public class DeleteTimeSlot extends SQLCmd {
 		 * statement.setString(4,pname); statement.executeUpdate(); b = true; }
 		 * catch(SQLException sqe){ System.out.println(sqe.toString()); }
 		 */
+	}
+
+	private void deleteAppointments(int userId,String date) {
+		// TODO Auto-generated method stub
+		
+		try{
+			String deleteAppointments = "DELETE FROM appointments WHERE advisor_userId=? and date=?;";
+			PreparedStatement deleteStatement = conn.prepareStatement(deleteAppointments); 
+			deleteStatement.setInt(1,userId);
+			deleteStatement.setString(2,date);
+			deleteStatement.executeUpdate();
+			System.out.println("delete Appointments  "+deleteStatement.toString());
+			
+		} catch (SQLException sqe) {
+			System.out.println(" Appointments not removed "+sqe.toString());
+		}
+		
 	}
 
 	public void processResult() {
@@ -72,7 +90,7 @@ public class DeleteTimeSlot extends SQLCmd {
 
 	public String fetchCrHash() {
 		try {
-			String command = "SELECT `session_id` FROM advising_schedule WHERE userId=? AND date=? AND start =? ";
+			String command = "SELECT `session_id` FROM advising_schedule WHERE userId=? AND date=? AND start =?;";
 			PreparedStatement statement = conn.prepareStatement(command);
 			statement.setInt(1, userId);
 			statement.setString(2, date);
@@ -94,7 +112,7 @@ public class DeleteTimeSlot extends SQLCmd {
 
 	public String getPrHash(String tempCrHash) {
 		try {
-			String prCommand = "SELECT `prHash` FROM `map_schedules` where `crHash` = ?";
+			String prCommand = "SELECT `prHash` FROM `map_schedules` where `crHash` = ?;";
 			PreparedStatement statement = conn.prepareStatement(prCommand);
 			statement.setString(1, tempCrHash);
 			System.out.println(statement.toString());
@@ -117,7 +135,7 @@ public class DeleteTimeSlot extends SQLCmd {
 	public void getListofHashes(String hashValue) {
 		String localHash = null;
 		try {
-			String cmd = "SELECT `crHash` FROM `map_schedules` where `prHash` = ?";
+			String cmd = "SELECT `crHash` FROM `map_schedules` where `prHash` = ?;";
 			PreparedStatement cmdStmnt = conn.prepareStatement(cmd);
 			cmdStmnt.setString(1, hashValue);
 			System.out.println(cmdStmnt.toString());
@@ -150,7 +168,7 @@ public class DeleteTimeSlot extends SQLCmd {
 	public void deleteFromAdvisingSchedule(String str){
 		
 		try{
-			String deleteCommand = "DELETE FROM advising_schedule WHERE session_id=?";
+			String deleteCommand = "DELETE FROM advising_schedule WHERE session_id=?;";
 			PreparedStatement deleteStatement = conn.prepareStatement(deleteCommand); 
 			deleteStatement.setString(1,str);
 			deleteStatement.executeUpdate();
@@ -165,7 +183,7 @@ public class DeleteTimeSlot extends SQLCmd {
 public void deleteFromMapSchedules(String str){
 		
 		try{
-			String deleteCommand = "DELETE FROM map_schedules WHERE crHash=? ";
+			String deleteCommand = "DELETE FROM map_schedules WHERE crHash=?;";
 			PreparedStatement deleteStatement = conn.prepareStatement(deleteCommand); 
 			deleteStatement.setString(1,str);
 			deleteStatement.executeUpdate();

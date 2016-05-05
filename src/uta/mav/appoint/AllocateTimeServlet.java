@@ -46,6 +46,8 @@ public class AllocateTimeServlet extends HttpServlet {
 					ArrayList<Object> appointments = user.accept(v,null);
 					if (appointments.size() != 0){
 						session.setAttribute("appointments", appointments);
+					}else{
+						session.setAttribute("appointments", null);
 					}
 				}
 			else{
