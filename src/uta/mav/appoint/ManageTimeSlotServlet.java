@@ -31,6 +31,9 @@ public class ManageTimeSlotServlet extends HttpServlet {
 			at.setStartTime(request.getParameter("StartTime2"));
 			at.setEndTime(request.getParameter("EndTime2"));
 			at.setEmail(user.getEmail()); //using pname to find correct advisor instead of email
+			at.setOldDate(request.getParameter("oldDate"));
+			at.setOldStartTime(request.getParameter("oldStartTime2"));
+			at.setOldEndTime(request.getParameter("oldEndTime2"));
 			Visitor v = new ManageTimeSlotVisitor();
 			user.accept(v,at);
 			request.setAttribute("response",user.getMsg());

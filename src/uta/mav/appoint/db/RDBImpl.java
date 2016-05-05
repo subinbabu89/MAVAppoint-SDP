@@ -1,13 +1,16 @@
 package uta.mav.appoint.db;
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Properties;
 
 import uta.mav.appoint.PrimitiveTimeSlot;
+import uta.mav.appoint.SendEmailServlet;
 import uta.mav.appoint.TimeSlotComponent;
 import uta.mav.appoint.beans.AllocateTime;
 import uta.mav.appoint.beans.Appointment;
@@ -45,6 +48,7 @@ import uta.mav.appoint.db.command.UpdateAdvisor;
 import uta.mav.appoint.db.command.UpdateAppointment;
 import uta.mav.appoint.db.command.UpdateAppointmentType;
 import uta.mav.appoint.db.command.UpdateUser;
+import uta.mav.appoint.email.Email;
 import uta.mav.appoint.helpers.EncryptionDecryptionAES;
 import uta.mav.appoint.helpers.HashingClass;
 import uta.mav.appoint.helpers.TimeSlotHelpers;
@@ -58,14 +62,27 @@ import uta.mav.appoint.login.ProspectiveStudent;
 import uta.mav.appoint.login.StudentUser;
 
 public class RDBImpl implements DBImplInterface {
-
+	String filename = "config.properties";
+	Properties properties = new Properties();
+	InputStream inputStream = null;
 	public Connection connectDB() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			String jdbcUrl = "jdbc:mysql://localhost:3306/mavs";
-			String userid = "root";
-			String password = "";
-			Connection conn = DriverManager.getConnection(jdbcUrl, userid, password);
+//			String jdbcUrl = "jdbc:mysql://localhost:3306/mavs";
+//			String userid = "root";
+//			String password = "admin";
+			
+			inputStream = SendEmailServlet.class.getClassLoader().getResourceAsStream(filename);
+			if(inputStream==null){
+		            System.out.println("Sorry, unable to find " + filename);
+			    return null;
+			}
+
+			properties.load(inputStream);
+				
+			
+			
+			Connection conn = DriverManager.getConnection(properties.getProperty("jdbcUrl"),properties.getProperty("userid"), properties.getProperty("databasePass"));
 			return conn;
 		} catch (Exception e) {
 			System.out.println(e.toString());
@@ -437,6 +454,17 @@ public class RDBImpl implements DBImplInterface {
 		if ((Boolean) cmd.getResult().get(0) == true) {
 			cmd = new AddTimeSlot(at, id,hash1,hash2);
 			cmd.execute();
+			
+//			getAppointments(user)
+//			String msgSub = "Mavappoint User Information";
+//
+//			String msgText = "An advisor account has been created for your email address! Login to change your password. Your login information is:"
+//					+ "\nUsername: " + advisorUser.getPname() + "\npassword: \"" + password
+//					+ "\" " + "\nMavAppoint";
+//			String toEmail = advisorUser.getEmail();
+//
+//			Email newMail = new Email(msgSub, msgText, toEmail);
+//			newMail.sendMail();
 			return (String) cmd.getResult().get(0);
 		} else {
 			return "Unable to add time slot.";
