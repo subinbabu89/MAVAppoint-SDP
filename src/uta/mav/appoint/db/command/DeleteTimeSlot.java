@@ -19,8 +19,8 @@ public class DeleteTimeSlot extends SQLCmd {
 	String tempPrHash = null;
 
 	public DeleteTimeSlot(AllocateTime at, int userid) {
-		date = at.getDate();
-		start = at.getStartTime();
+		date = at.getOldDate();
+		start = at.getOldStartTime();
 		end = at.getEndTime();
 		pname = at.getEmail();
 		userId = userid;

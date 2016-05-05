@@ -49,9 +49,13 @@
 		    							document.getElementById("EndTime2").value = event.end.format('HH:mm');
 		    							document.getElementById("pname").value = event.title;
 		    							document.getElementById("Date").value = event.start.format('YYYY-MM-DD');
+		    							document.getElementById("oldDate").value = event.start.format('YYYY-MM-DD');
+		    							document.getElementById("oldStartTime2").value = event.start.format('HH:mm');
+		    							document.getElementById("oldEndTime2").value = event.end.format('HH:mm');
 		    							$("#deleteTimeSlotModal").modal();
 		    							}
 		    							else{
+		    								
 		    								updateAppt.submit();
 		    							}
 		    						},
@@ -105,6 +109,9 @@
 						class="form-control" name=opendate id="opendate"> <label
 						for="repeat">Weekly repeat duration:</label> 
 						<input type="text" class="form-control" name=repeat id="repeat" value="0"> 
+						<input type="hidden" class="form-control" name="oldDate" id="oldDate" >
+						<input type="hidden" class="form-control" name="oldStartTime2" id="oldStartTime2" >
+						<input type="hidden" class="form-control" name="oldEndTime2" id="oldEndTime2" >
 						<label id="result"><font style="color: #e67e22" size="4"></label>
 				</div>
 				<div class="modal-footer">
@@ -135,7 +142,9 @@
 						<label for="repeat">Weekly repeat duration:</label> 
 						<input type="text" class="form-control" name="repeatManage" id="repeatMng" value="0">
 						<input
-						type="hidden" name=pname id="pname"> <label id="result2"><font
+						type="hidden" name=pname id="pname">
+						<input
+						type="hidden" name=oldDate id="oldDate"> <label id="result2"><font
 						style="color: #e67e22" size="4"></font></label>
 				</div>
 				
@@ -177,9 +186,12 @@
 							var starttime = document.getElementById("StartTime2").value;
 							var endtime = document.getElementById("EndTime2").value;
 							var date = document.getElementById("Date").value;
+							var oldDate = document.getElementById("oldDate").value;
 							var pname = document.getElementById("pname").value;
 							var repeatManage = document.getElementById("repeatMng").value;
-							var params = ('StartTime2='+starttime+'&EndTime2='+endtime+'&Date='+date+'&pname='+pname+'&repeatManage='+repeatManage);
+							var oldStartTime = document.getElementById("oldStartTime2").value;
+							var oldEndTime = document.getElementById("oldEndTime2").value;
+							var params = ('StartTime2='+starttime+'&EndTime2='+endtime+'&Date='+date+'&pname='+pname+'&repeatManage='+repeatManage+'&oldDate='+oldDate+'&oldStartTime2='+oldStartTime+'&oldEndTime2='+oldEndTime);
 							console.log("Params" + params);
 							var xmlhttp;
 							xmlhttp = new XMLHttpRequest();
@@ -209,7 +221,12 @@
 			var endtime = document.getElementById("EndTime2").value;
 			var date = document.getElementById("Date").value;
 			var pname = document.getElementById("pname").value;
-			var params = ('StartTime2='+starttime+'&EndTime2='+endtime+'&Date='+date+'&pname='+pname);
+			var oldDate = document.getElementById("oldDate").value;
+			var repeatManage = document.getElementById("repeatMng").value;
+			var oldStartTime = document.getElementById("oldStartTime2").value;
+			var oldEndTime = document.getElementById("oldEndTime2").value;
+			var params = ('StartTime2='+starttime+'&EndTime2='+endtime+'&Date='+date+'&pname='+pname+'&repeatManage='+repeatManage+'&oldDate='+oldDate+'&oldStartTime2='+oldStartTime+'&oldEndTime2='+oldEndTime);
+			console.log(params);
 			var xmlhttp;
 			xmlhttp = new XMLHttpRequest();
 			xmlhttp.onreadystatechange=function(){
@@ -219,8 +236,6 @@
 			}
 			xmlhttp.open("POST","ts-manage",true);
 			xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-			xmlhttp.setRequestHeader("Content-length",params.length);
-			xmlhttp.setRequestHeader("Connection","close");
 			xmlhttp.send(params);
 			document.getElementById("result2").innerHTML = "Attempting to delete...";
 			return true;
