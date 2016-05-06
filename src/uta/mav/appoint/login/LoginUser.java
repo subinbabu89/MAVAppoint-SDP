@@ -3,6 +3,7 @@ package uta.mav.appoint.login;
 import java.util.ArrayList;
 
 import uta.mav.appoint.db.DatabaseManager;
+import uta.mav.appoint.helpers.HashingClass;
 import uta.mav.appoint.visitor.Visitor;
 
 public class LoginUser {
@@ -181,6 +182,30 @@ public class LoginUser {
 
 	public void setMinors(ArrayList<String> minors) {
 		this.minors = minors;
+	}
+//Maithili modified for expert pattern
+	public boolean verifyPwd(String password2) {
+		// TODO Auto-generated method stub
+		boolean result=false; 
+		try {
+		if (HashingClass.passwordEncoder.matches(password2,this.password))
+			
+			result= true;
+		else
+			result= false;
+	
+	} catch (Exception e) {
+		System.out.println(e + " -- FOUND IN -- " + this.getClass().getSimpleName());
+	}
+		return result;
+	}
+
+	public boolean isfirstlogin() {
+		// TODO Auto-generated method stub
+		if(this.validated.equals(0))
+			return false;
+		else 
+			return true;
 	}
 	
 }

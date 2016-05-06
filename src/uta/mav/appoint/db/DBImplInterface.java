@@ -51,4 +51,6 @@ public interface DBImplInterface {
 	public String updateAppointmentType(LoginUser user, AppointmentType at);//Added by Maithili
 	public Boolean createGuestUser(GuestUser guestUser);
 	public Boolean createProspectiveStudent(ProspectiveStudent prospectiveStudent);
+	//Maithili modified for expert pattern
+	public LoginUser verifyUser(String emailAddress);
 }

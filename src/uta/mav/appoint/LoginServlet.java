@@ -32,7 +32,8 @@ public class LoginServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+/*
+ 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		session = request.getSession();
 		String emailAddress = request.getParameter("emailAddress");
 		String password = request.getParameter("password");
@@ -66,4 +67,47 @@ public class LoginServlet extends HttpServlet {
 			request.getRequestDispatcher("/WEB-INF/jsp/views/login.jsp").forward(request,response);
 		}
 	}
+	*/
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		session = request.getSession();
+		String emailAddress = request.getParameter("emailAddress");
+		String password = request.getParameter("password");
+		GetSet sets = new GetSet();
+		sets.setEmailAddress(emailAddress);
+		sets.setPassword(password);
+		
+		try{
+			//call db manager and authenticate user, return value will be 0 or
+			//an integer indicating a role
+			DatabaseManager dbm = new DatabaseManager();
+		//	LoginUser user_check= new LoginUser();
+			LoginUser user = dbm.verifyUser(emailAddress);
+			boolean pwd=user.verifyPwd(password);
+			boolean first=user.isfirstlogin();
+			if(user == null || (pwd==false)){
+				
+				//redirect back to login if authentication fails
+				//need to add a "invalid username or password" response
+				session.setAttribute("message", "Username or Password Invalid");
+				request.getRequestDispatcher("/WEB-INF/jsp/views/login.jsp").forward(request,response);
+				
+				
+			}
+			else{
+				session.setAttribute("user", user);
+				if((pwd==true)&(first==true))
+					response.sendRedirect("index");
+				else{
+					response.sendRedirect("changePassword");
+				}
+			}
+		}
+		catch(Exception e){
+			System.out.println(e);
+			request.getRequestDispatcher("/WEB-INF/jsp/views/login.jsp").forward(request,response);
+		}
+	}
+
+	
 }

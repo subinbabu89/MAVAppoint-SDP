@@ -156,5 +156,10 @@ public class DatabaseManager {
 		// TODO Auto-generated method stub
 		return imp.updateAppointmentType(user,at);
 	}
+//Maithili modified for expert pattern
+	public LoginUser verifyUser(String emailAddress) {
+		// TODO Auto-generated method stub
+		return imp.verifyUser(emailAddress);
+	}
 }
 

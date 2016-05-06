@@ -30,9 +30,9 @@ public class RDBImpl implements DBImplInterface {
 	public Connection connectDB() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			String jdbcUrl = "jdbc:mysql://localhost:3306/mavs";
+			String jdbcUrl = "jdbc:mysql://localhost:3306/mavappoint";
 			String userid = "root";
-			String password = "admin";
+			String password = "";
 			Connection conn = DriverManager.getConnection(jdbcUrl, userid, password);
 			return conn;
 		} catch (Exception e) {
@@ -732,5 +732,23 @@ public class RDBImpl implements DBImplInterface {
 		cmd = new UpdateAppointmentType(at, (int) cmd.getResult().get(0));
 		cmd.execute();
 		return (String) cmd.getResult().get(0);
+	}
+//Maithili modified for expert pattern
+	@Override
+	public LoginUser verifyUser(String emailAddress) {
+		// TODO Auto-generated method stub
+		LoginUser user = null;
+		try {
+			SQLCmd cmd = new CheckUser(emailAddress,"default");
+			cmd.execute();
+			System.out.println("Result = " + cmd.getResult());
+			user = (LoginUser) (cmd.getResult()).get(0);
+			//if (!(user != null && HashingClass.passwordEncoder.matches(set.getPassword(), user.getPassword()))) {
+				//return null;
+			//}
+		} catch (Exception e) {
+			System.out.println(e + " -- FOUND IN -- " + this.getClass().getSimpleName());
+		}
+		return user;
 	}
 }
